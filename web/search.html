@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"> -->
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/search.css">
+
+</head>
+<body>
+<div class="search-header">
+    <ul>
+        <li>
+            <i class="search-header-tag"></i>
+            <span>基于量化算法的金融分析系统</span>
+        </li>
+        <li>
+            <div class="search-block">
+                <input type="text" class="search-import" placeholder="输入股票代码" id="searchCode">
+                <i class="search-tag"></i>
+            </div>
+        </li>
+        <li>
+            <span class="js-login-form">
+                <a href="javascript:void(0)" class="loading">登录</a>
+                <a href="javascript:void(0)" class="register">注册</a>
+            </span>
+            <span class="js-current-user" style="display: none">
+                <a href="javascript:void(0)" class="logout js-logout">注销</a>
+                <a href="javascript:void(0)" class="current-username">当前用户: <span class="js-current-username"></span></a>
+            </span>
+        </li>
+
+    </ul>
+</div>
+<div class="shares-today">
+    <!-- <ul>
+        <li>
+            <h2>股票名称</h2>
+        </li>
+        <li>
+            <span class="today-total">今开<span class="font-up">3110.63</span></span>
+            <span class="today-total">昨收<span>3109.5</span></span>
+        </li>
+        <li>3126.741</li>
+        <li><span class="font-important change-pre">0.35%</span></li>
+    </ul> -->
+</div>
+<ul class="time-shareing-list">
+    <!-- <li>
+        <span class="time-out">3分钟前</span>
+        <br>
+        <span class="time-out-price font-up">3127.95<i class="arrow-up"></i></span>
+    </li> -->
+</ul>
+<div class="time-choice">
+    <ul>
+        <li class="choice-checked" data-count="0">今日</li>
+        <hr class="choice-tag">
+        <li data-count="1">昨日</li>
+        <li data-count="2">两日前</li>
+        <li data-count="3">三日前</li>
+        <li data-count="4">四日前</li>
+    </ul>
+</div>
+<div class="time-shareing-chart">
+        <div id="shareingChart" style="height:600px;width:800px"></div>
+
+</div>
+<div class="history-search">
+    <h3>搜索历史</h3>
+    <ul>
+        <li>股票名称</li>
+        <li>股票名称</li>
+        <li>股票名称</li>
+        <li>股票名称</li>
+
+    </ul>
+</div>
+<div class="date-choice">
+    <label>起始时间</label>
+    <input type="text" id="startDate" class="date_picker">
+    <label>结束时间</label>
+    <input type="text" id="endDate" class="date_picker">
+</div>
+<div class="history-chart" id="historyChart">
+</div>
+<div class="loading-cartoon">
+    <canvas id="loadingCartoon"></canvas>
+    <p>努力加载中...</p>
+</div>
+<div class="loading-pop">
+    <div class="back"></div>
+    <div class="loading-content">
+         <div class="loading-header">欢迎登录量化算法的金融分析系统</div>
+            <div class="loading-username">
+                <span class="loading-username-logo"></span>
+                <hr class="loading-tag">
+                <input type="text" placeholder="用户名" class="loading-username-text" id="userName">
+            </div>
+            <div class="loading-password">
+                <span class="loading-password-logo"></span>
+                <hr class="loading-tag">
+                <input type="password" placeholder="密码" class="loading-password-text" id="passWord">
+            </div>
+            <p class="wrong-prompt"></p>
+            <a href="javascript:void(0)" class="loading-btn">登录</a>
+            <a href="javascript:void(0)" class="register-link">注册</a>
+    </div>
+</div>
+<div class="register-pop">
+    <div class="back"></div>
+    <div class="register-content">
+         <div class="register-header">欢迎登录量化算法的金融分析系统</div>
+            <div class="register-username">
+                <span class="register-username-logo"></span>
+                <hr class="register-tag">
+                <input type="text" placeholder="用户名" class="register-username-text" id="reUserName">
+            </div>
+            <div class="register-password">
+                <span class="register-password-logo"></span>
+                <hr class="register-tag">
+                <input type="password" placeholder="密码" class="register-password-text" id="rePassWord">
+            </div>
+            <div class="register-sure-password">
+                <span class="register-sure-password-logo"></span>
+                <hr class="register-tag">
+                <input type="password" placeholder="确认密码" class="register-sure-password-text" id="reSurePassWord">
+            </div>
+            <a href="javascript:void(0)" class="register-btn">注册</a>
+            <!-- <a href="javascript:void(0)" class="register-link">注册</a> -->
+    </div>
+</div>
+    <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/jquery.date_input.pack.js"></script>
+    <script type="text/javascript" src="js/js.cookie.js"></script>
+    <script type="text/javascript" src="js/cartoon.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/search.js"></script>
+
+
+</body>
+</html>

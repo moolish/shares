@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>股票</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+    <div class="shares-header">
+        <ul>
+            <li>基于量化算法的金融分析系统</li>
+            <li class="checked">首页</li>
+            <li>预测算法</li>
+            <li>基础介绍</li>
+       </ul>
+       <div class="checked-tag head-tab1">
+       </div>
+    </div>
+    <div class="first-block">
+        <div class="block-title"></div>
+        <div class="block-border">算法目标：
+            交易成本最小化。
+            <br>
+            成交均价最贴近目标价格。
+            <br>
+            成交价格风险最小化。
+            <br>
+            隐藏下单意图。
+            <br>
+            其他非技术性原因。
+        </div>
+        <button class="down-btn"></button>
+    </div>
+    <div class="instroduct">
+        <ul>
+            <li>轻量级股票查询</li>
+            <li>多种股票预测手段</li>
+            <li>轻松股票入门</li>
+            <li>算法简介</li>
+        </ul>
+    </div>
+    <div class="vwap">
+        <div class="vwap-logo"></div>
+        <div class="vwap-title">VWAP算法</div>
+        <div class="vwap-content">VWAP策略的内容。VWAP策略包含宏观和微观两个层面的内容。宏观层面要解决如何拆分大额委托单的问题，需要投资者对股票的日内成交量做出预测，我们建议按两分钟的时间长度来拆分订单。微观层面要确定是用限价单还是市价单来发出交易指令，考虑到VWAP是一种被动跟踪市场均价的策略，我们建议采用市价委托方式，一方面有利于控制最终成交均价与市场均价之间的偏差，另一方面也可以提高委托成交的效率，避免限价单长时间挂单不能成交的风险</div>
+        <button type="button" class="vwap-btn">示例展示</button>
+    </div>
+    <a href="javascript:">
+        <div class="mean-variance">
+            <span class="mv-title">均值-方差算法</span>
+            <br>
+            <span class="mv-summary">下单时证券的市场价格作为基准，用期望成交均价与到达价格的差值E(S -S0 )来衡量均值，用这一差值的波动率 0 V(S -S )来衡量方差</span>
+            <button type="button" class="mv-btn">示例展示</button>
+        </div>
+    </a>
+
+    <div class="combined-mean-variance">
+        <div class="cmv-text">
+             <span class="cmv-title">组合均值-方差算法</span>
+            <br>
+            <span class="cmv-summary">下单时证券的市场价格作为基准，用期望成交均价与到达价格的差值E(S -S0 )来衡量均值，用这一差值的波动率 0 V(S -S )来衡量方差</span>
+            <button type="button" class="cmv-btn">示例展示</button>
+        </div>
+        <div class="cmv-back"></div>
+       
+    </div>
+    <div class="shares-search">
+        <div class="search-text">
+            <span class="search-title">搜索信息</span>
+            <span class="search-summary">搜索股票代码，查看历史交易记录</span>
+        </div>
+        <div class="search-input">
+            <div class="search-block">
+                <input type="text" class="search-import" placeholder="输入股票代码" id="searchCode">
+               
+            </div>
+
+             <button type="button" class="search-btn" id="searchShares">搜索</button>
+        </div>
+    </div>
+    <div class="footer">@xiaoyihang</div>
+    <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    
+</body>
+</html>
