@@ -555,6 +555,10 @@ function getAjaxHisory(groupList){
 
     $.ajax({
         url:"http://localhost:3000/historyData?code=cn_"+code+"&start="+startDate+"&end="+endDate,
+        data: {
+            username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+            shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId,
+        },
         dataType:"json",
         cache:"false",
         type:"GET",
