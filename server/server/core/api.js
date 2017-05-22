@@ -6,7 +6,9 @@ const request = require('../helper/api');
 
 // 查询历史数据
 const _getHistoryShare = function(shareIds, cb) {
-    const options = {};
+    const options = {
+        all: true
+    };
     if (!shareIds) {
         cb(null, []);
     }
@@ -24,7 +26,7 @@ const _getHistoryShare = function(shareIds, cb) {
         if (err) {
             console.error(err);
         }
-        return cb(null, shares || []);
+        return cb(null, [].concat(shares) || []);
     });
 };
 
@@ -118,7 +120,7 @@ const historyData = function (req, res, next) {
         console.log(username);
         if (username) {
             models['User'].update({
-                shareId: `${shareId ? shareId + '-' : ''}${code.split('_')[1] || code}`
+                shareId: shareId,
             }, {
                 where: { username: username }
             }).then(user => {
