@@ -22,13 +22,19 @@
             </div>
         </li>
         <li>
-            <span class="js-login-form">
-                <a href="javascript:void(0)" class="loading">登录</a>
+            <span class="js-login-form" style="display: block;">
                 <a href="javascript:void(0)" class="register">注册</a>
+                <a href="javascript:void(0)" class="loading">登录</a>
             </span>
             <span class="js-current-user" style="display: none">
-                <a href="javascript:void(0)" class="logout js-logout">注销</a>
-                <a href="javascript:void(0)" class="current-username">当前用户: <span class="js-current-username"></span></a>
+                <div class="user-photo">
+                    <img src="images/goldDog.png" alt="">
+                </div>
+                <div class="user-login">
+                    <span class="current-username"><span class="username-text">当前用户:</span> <span class="js-current-username"></span></span>
+                    <a href="javascript:void(0)" class="logout js-logout">注销</a>
+                </div>
+
             </span>
         </li>
 
@@ -59,13 +65,14 @@
         <li class="choice-checked" data-count="0">今日</li>
         <hr class="choice-tag">
         <li data-count="1">昨日</li>
-        <li data-count="2">两日前</li>
-        <li data-count="3">三日前</li>
-        <li data-count="4">四日前</li>
+        <i class="choice-more hide-list"></i>
+        <li class="hide-list" data-count="2">两日前</li>
+        <li class="hide-list" data-count="3">三日前</li>
+        <li class="hide-list" data-count="4">四日前</li>
     </ul>
 </div>
 <div class="time-shareing-chart">
-        <div id="shareingChart" style="height:600px;width:800px"></div>
+    <div id="shareingChart" style="height:600px;width:800px"></div>
 
 </div>
 <div class="history-search">
@@ -93,52 +100,73 @@
 <div class="loading-pop">
     <div class="back"></div>
     <div class="loading-content">
-         <div class="loading-header">欢迎登录量化算法的金融分析系统</div>
-            <div class="loading-username">
-                <span class="loading-username-logo"></span>
-                <hr class="loading-tag">
-                <input type="text" placeholder="用户名" class="loading-username-text" id="userName">
-            </div>
-            <div class="loading-password">
-                <span class="loading-password-logo"></span>
-                <hr class="loading-tag">
-                <input type="password" placeholder="密码" class="loading-password-text" id="passWord">
-            </div>
-            <p class="wrong-prompt"></p>
-            <a href="javascript:void(0)" class="loading-btn">登录</a>
-            <a href="javascript:void(0)" class="register-link">注册</a>
+        <div class="loading-header">欢迎登录量化算法的金融分析系统</div>
+        <div class="loading-username">
+            <span class="loading-username-logo"></span>
+            <hr class="loading-tag">
+            <input type="text" placeholder="用户名" class="loading-username-text" id="userName">
+        </div>
+        <div class="loading-password">
+            <span class="loading-password-logo"></span>
+            <hr class="loading-tag">
+            <input type="password" placeholder="密码" class="loading-password-text" id="passWord">
+        </div>
+        <p class="wrong-prompt"></p>
+        <a href="javascript:void(0)" class="loading-btn">登录</a>
+        <a href="javascript:void(0)" class="register-link">注册</a>
     </div>
 </div>
 <div class="register-pop">
     <div class="back"></div>
     <div class="register-content">
-         <div class="register-header">欢迎登录量化算法的金融分析系统</div>
-            <div class="register-username">
-                <span class="register-username-logo"></span>
-                <hr class="register-tag">
-                <input type="text" placeholder="用户名" class="register-username-text" id="reUserName">
-            </div>
-            <div class="register-password">
-                <span class="register-password-logo"></span>
-                <hr class="register-tag">
-                <input type="password" placeholder="密码" class="register-password-text" id="rePassWord">
-            </div>
-            <div class="register-sure-password">
-                <span class="register-sure-password-logo"></span>
-                <hr class="register-tag">
-                <input type="password" placeholder="确认密码" class="register-sure-password-text" id="reSurePassWord">
-            </div>
-            <a href="javascript:void(0)" class="register-btn">注册</a>
-            <!-- <a href="javascript:void(0)" class="register-link">注册</a> -->
+        <div class="register-header">欢迎登录量化算法的金融分析系统</div>
+        <div class="register-username">
+            <span class="register-username-logo"></span>
+            <hr class="register-tag">
+            <input type="text" placeholder="用户名" class="register-username-text" id="reUserName">
+        </div>
+        <div class="register-password">
+            <span class="register-password-logo"></span>
+            <hr class="register-tag">
+            <input type="password" placeholder="密码" class="register-password-text" id="rePassWord">
+        </div>
+        <div class="register-sure-password">
+            <span class="register-sure-password-logo"></span>
+            <hr class="register-tag">
+            <input type="password" placeholder="确认密码" class="register-sure-password-text" id="reSurePassWord">
+        </div>
+        <a href="javascript:void(0)" class="register-btn">注册</a>
+        <!-- <a href="javascript:void(0)" class="register-link">注册</a> -->
     </div>
 </div>
-    <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
-    <script type="text/javascript" src="js/echarts.min.js"></script>
-    <script type="text/javascript" src="js/jquery.date_input.pack.js"></script>
-    <script type="text/javascript" src="js/js.cookie.js"></script>
-    <script type="text/javascript" src="js/cartoon.js"></script>
-    <script type="text/javascript" src="js/utils.js"></script>
-    <script type="text/javascript" src="js/search.js"></script>
+<div class="sort-pop">
+    <div class="back"></div>
+    <div class="sort">
+        <div class="sort-content">
+            <div class="choose">
+                <div class="edit">
+                    <button type="button" value="edit">编辑</button>
+                </div>
+                <p>我的频道</p>
+                <ul></ul>
+            </div>
+            <div class="recommend">
+                <p>频道推荐</p>
+                <ul></ul>
+            </div>
+        </div>
+        <div class="sort-chart">
+            <div id="sortChart"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/jquery.date_input.pack.js"></script>
+<script type="text/javascript" src="js/js.cookie.js"></script>
+<script type="text/javascript" src="js/cartoon.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/search.js"></script>
 
 
 </body>

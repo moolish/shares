@@ -417,12 +417,13 @@ body{background:#1b1f28;}
 }
 .time-choice{
     float:right;
-    width:200px;
+    width:142px;
     height:20px;
     margin-right: 100px;
     color:#fff;
     text-align: center;
     overflow: hidden;
+    background:url(../images/more-choice.png) right center/auto 100% no-repeat;
 }
 .time-choice ul{
     overflow: hidden
@@ -447,6 +448,22 @@ body{background:#1b1f28;}
     margin:0 10px;
 
 }
+.choice-more{
+    display: inline-block;
+    float:left;
+    width:20px;
+    height:20px;
+
+}
+.time-choice ul li:nth-child(5){
+    float:left;
+}
+.time-choice ul li:nth-child(6){
+    float:left;
+}
+.time-choice ul li:nth-child(7){
+    float:left;
+}
 .choice-checked{
     font-weight: bold;
     color:#ffe100;
@@ -455,4 +472,52 @@ body{background:#1b1f28;}
     width: 800px;
     height: 600px;
     margin: 100px auto;
+}
+.js-current-user{
+    display: block;
+    height: 60px;
+    /*text-align: right;*/
+    /*padding:10px 0;*/
+
+}
+.user-login{
+    float: right;
+    height:60px;
+}
+.current-username{
+    display: block;
+    height: 30px;
+    font-size: 0px;
+}
+.js-logout{
+    display: block;
+    height: 20px;
+    color:#acacac;
+    line-height:20px
+}
+.username-text{
+    font-size: 16px;
+    display: inline-block;
+    float: right;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
+}
+.js-current-username{
+    font-size:16px;
+}
+.user-photo{
+    float: right;
+    width:40px;
+    height:40px;
+    -webkit-border-radius:50%;
+    -moz-border-radius:50%;
+    border-radius:50%;
+    overflow: hidden;
+    margin-top:10px;
+    margin-left:20px;
+}
+.js-current-user img{
+    width: 100%;
+    height: 100%;
 }
