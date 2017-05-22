@@ -542,7 +542,7 @@ body{background:#1b1f28;}
     height: 100%;
 }
 .sort-pop{
-    display: none;
+    /*display: none;*/
 }
 .sort{
     position:fixed;

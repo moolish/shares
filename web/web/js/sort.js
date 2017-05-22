@@ -1,14 +1,64 @@
 /**
  * Created by Administrator on 2017/5/22.
  */
-function sort() {
-    var array1 = ["冷冻食品", "婴儿尿布", "日常护理", "路由器", "手机", "手机贴膜", "米面杂粮", "休闲食品", "水果"];
-    var array2 = ["蜜饯干果", "面膜", "乳液面霜", "饮品甜品", "移动电源", "洁面", "沐浴", "电水壶", "食用油", "禽肉蛋品", "休闲零食", "插座", "电饭煲", "蔬菜", "手机保护套"];
+var firstSort={
+    groupId:"",
+    groupName:"",
+    startTime:"",
+    endTime:"",
+    hisData:"",
+    timeData:""
+},
+    secondSort={
+        groupId:"",
+        groupName:"",
+        startTime:"",
+        endTime:"",
+        hisData:"",
+        timeData:""
+    },
+    thirdSort={
+        groupId:"",
+        groupName:"",
+        startTime:"",
+        endTime:"",
+        hisData:"",
+        timeData:""
+    },
+    fourthSort={
+        groupId:"",
+        groupName:"",
+        startTime:"",
+        endTime:"",
+        hisData:"",
+        timeData:""
+    },
+    fifthSort={
+        groupId:"",
+        groupName:"",
+        startTime:"",
+        endTime:"",
+        hisData:"",
+        timeData:""
+    };
+function sort(array1,array2) {
+    var array1 = ["600129", "600128", "600127", "600125", "600321"];
+    var array2 = ["000321","000123","000432","000234","000568"];
     var hasMove = false;
     initPop(array1, array2);
     disLike(array1);
     recommendmove(array1, array2)
     choosemove(array1, array2, hasMove);
+    $("#startSort").unbind("click").bind({
+        "click":function(){
+            splitSort(array1);
+        }
+    });
+    $("#addSort").unbind("click").bind({
+        "click":function(){
+
+        }
+    })
 }
 
 // 创建
@@ -62,7 +112,7 @@ function recommendmove(array1,array2){
         var top1N=4.9+parseInt((array1.length)/4)*2
         var left1=0.85+(array1.length-1)%4*4.3;
         var lastmodelX=(array1.length)%4*4.3+0.85
-        var lastmodelY=parseInt(array1.length/4)*2+4.9
+        var lastmodelY=parseInt(array1.length/4)*2
         var modelX=(array1.length)%4*4.3+0.85-0.85-num%4*4.3;
         var modelY=parseInt(array1.length/4)*2+4.9-1.85-parseInt(num/4)*2-1.3-top1N-3.25;//新增快前模块高+top-div2top-div2模块高-div2margintop-div1height-div1paddingtop
         array1.push(array2[num]);//把元素放入上方数组
@@ -85,7 +135,7 @@ function recommendmove(array1,array2){
             if(i%4==0){
 
                 $(".recommendList"+i).css({
-                    "top":""+(1.85+parseInt(i/4)*2-2)+"rem",
+                    "top":""+(parseInt(i/4)*2-2)+"rem",
                     "left":""+(0.85+i%4*4.3+12.9)+"rem",
                     "transition":"all 0.5s"
                 })
@@ -305,7 +355,7 @@ function choosemove(array1,array2,hasMove,event){
                 });
                 $(".choose").css({"height":top1N+"rem","transition":"all 0.5s"});
 
-                $(".recommend ul").prepend("<li style='position:absolute;z-index:0;top:1.85rem;left:0.85rem;visibility:hidden'>"+array2[0]+"</li>");
+                $(".recommend ul").prepend("<li style='position:absolute;z-index:0;top:0rem;left:0.85rem;visibility:hidden'>"+array2[0]+"</li>");
                 for(var j=0;j<array2.length;j++){
                     $(".recommend ul li").eq(j).attr("class","recommendList"+j).addClass("changeModel");
                 }
@@ -363,10 +413,270 @@ function choosemove(array1,array2,hasMove,event){
             }
         }
     });
-}
-function timingChartP(){
-    for(var i=0;i<arr1.length;i++){
+    $(".choose ul li").live({"click":function(){
+        if($(".edit button").val()=="finish"){
+            var cancelClass=$(this).attr("class");
+            var num=parseInt(cancelClass.match(/[0-9]+/g));
+            array2.splice(0,0,array1[num]);
+            var cancelLi=$(this);
+            var lastmodelX=0.85;
+            var lastmodelY=1.85;
+            var modelY=3.9+parseInt(num/4)*2;
+            var modelX=0.85+num%4*4.3;
+            var top1N=3.9+parseInt((array1.length-1)/4)*2;
+            $(this).children().remove();
+            cancelLi.css({
+                "transform":"translate("+(-modelX+lastmodelX)+"rem,"+(lastmodelY+top1N+3.25+1.3-modelY)+"rem)",
+                "transition":"all 0.5s"
+            });
+            $(".choose").css({"height":top1N+"rem","transition":"all 0.5s"});
 
+            $(".recommend ul").prepend("<li style='position:absolute;z-index:0;top:0rem;left:0.85rem;visibility:hidden'>"+array2[0]+"</li>");
+            for(var j=0;j<array2.length;j++){
+                $(".recommend ul li").eq(j).attr("class","recommendList"+j).addClass("changeModel");
+            }
+
+            for(var i=parseInt(num)+1;i<array1.length;i++){
+
+                if((i)%4==0){
+                    $(".chooseList"+i).css({
+                        "top":""+(parseInt(i/4)*2-2)+"rem",
+                        "left":""+(0.85+i%4*4.3+12.9)+"rem",
+                        "transition":"all 0.5s"
+                    });
+                    $(".chooseList"+i).attr("class","chooseList"+(i-1));
+
+                }
+                else{
+                    $(".chooseList"+i).css({
+                        "left":""+(0.85+i%4*4.3-4.3)+"rem",
+                        "transition":"all 0.5s"
+                    });
+                    $(".chooseList"+i).attr("class","chooseList"+(i-1));
+                }
+            }
+            for(var j=1;j<array2.length;j++){
+                if(j%4==0){
+
+                    $(".recommendList"+j).css({
+                        "top":""+(1.85+parseInt((j-1)/4)*2+2)+"rem",
+                        "left":""+(0.85+(j-1)%4*4.3-12.9)+"rem",
+                        "transition":"all 0.5s"
+                    });
+                }
+                else{
+
+                    $(".recommendList"+j).css({
+                        "left":""+(0.85+(j-1)%4*4.3+4.3)+"rem",
+                        "transition":"all 0.5s"
+                    });
+
+                }
+            }
+            array1.splice(num,1);
+            setTimeout(function(){
+                cancelLi.remove();
+                $(".changeModel").css("visibility",null);
+                $(".changeModel").removeClass("changeModel");
+                console.log("recommendChange 1/2:"+array1.length,array2.length)
+                for(var m=0;m<array1.length;m++){
+                    console.log("array1.["+m+"]:"+array1[m]);
+                }
+                for(var n=0;n<array2.length;n++){
+                    console.log("array2.["+n+"]:"+array2[n]);
+                }
+            },300)
+        }
     }
-
+});
 }
+function splitSort(array1){
+    var sortlength=array1.length;
+    if(sortlength>5){
+        sortlength=5;
+    }
+    switch (sortlength){
+        case 5:{
+            fifthSort.groupId=array1[4];
+            $.ajax({
+                url:"http://route.showapi.com/131-49",
+                data:{
+                    showapi_appid:"37573",
+                    showapi_sign:"1160ac6566e344b5af7ba114fd60b6f7",
+                    code:fifthSort.groupId,
+                    day:"1"
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    fifthSort.groupName=data.showapi_res_body.name;
+                    fifthSort.timeData=data.showapi_res_body.dataList[0].minuteList;
+                }
+             });
+            fifthSort.startTime=getChoiceDate($("#startDate").val());
+            fifthSort.endTime=getChoiceDate($("#endDate").val())
+            $.ajax({
+                url:"http://localhost:3000/historyData?code=cn_"+fifthSort.groupId+"&start="+fifthSort.startTime+"&end="+fifthSort.startTime,
+                data: {
+                    username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+                    shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId,
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    fifthSort.hisData=data.data[0].hq;
+                }
+            });
+        }
+        case 4:{
+            fourthSort.groupId=array1[3];
+            $.ajax({
+                url:"http://route.showapi.com/131-49",
+                data:{
+                    showapi_appid:"37573",
+                    showapi_sign:"1160ac6566e344b5af7ba114fd60b6f7",
+                    code:fourthSort.groupId,
+                    day:"1"
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    fourthSort.groupName=data.showapi_res_body.name;
+                    fourthSort.timeData=data.showapi_res_body.dataList[0].minuteList;
+                }
+            });
+            fourthSort.startTime=getChoiceDate($("#startDate").val());
+            fourthSort.endTime=getChoiceDate($("#endDate").val());
+            $.ajax({
+                url:"http://localhost:3000/historyData?code=cn_"+fourthSort.groupId+"&start="+fourthSort.startTime+"&end="+fourthSort.startTime,
+                data: {
+                    username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+                    shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    fourthSort.hisData=data.data[0].hq;
+                }
+            });
+        }
+        case 3:{
+            thirdSort.groupId=array1[3];
+            $.ajax({
+                url:"http://route.showapi.com/131-49",
+                data:{
+                    showapi_appid:"37573",
+                    showapi_sign:"1160ac6566e344b5af7ba114fd60b6f7",
+                    code:thirdSort.groupId,
+                    day:"1"
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    thirdSort.groupName=data.showapi_res_body.name;
+                    thirdSort.timeData=data.showapi_res_body.dataList[0].minuteList;
+                }
+            });
+            thirdSort.startTime=getChoiceDate($("#startDate").val());
+            thirdSort.endTime=getChoiceDate($("#endDate").val());
+            $.ajax({
+                url:"http://localhost:3000/historyData?code=cn_"+thirdSort.groupId+"&start="+thirdSort.startTime+"&end="+thirdSort.startTime,
+                data: {
+                    username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+                    shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    thirdSort.hisData=data.data[0].hq;
+                }
+            });
+        }
+        case 2:{
+            secondSort.groupId=array1[3];
+            $.ajax({
+                url:"http://route.showapi.com/131-49",
+                data:{
+                    showapi_appid:"37573",
+                    showapi_sign:"1160ac6566e344b5af7ba114fd60b6f7",
+                    code:secondSort.groupId,
+                    day:"1"
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    secondSort.groupName=data.showapi_res_body.name;
+                    secondSort.timeData=data.showapi_res_body.dataList[0].minuteList;
+                }
+            });
+            secondSort.startTime=getChoiceDate($("#startDate").val());
+            secondSort.endTime=getChoiceDate($("#endDate").val());
+            $.ajax({
+                url:"http://localhost:3000/historyData?code=cn_"+secondSort.groupId+"&start="+secondSort.startTime+"&end="+secondSort.startTime,
+                data: {
+                    username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+                    shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    secondSort.hisData=data.data[0].hq;
+                }
+            });
+        }
+        case 1:{
+            firstSort.groupId=array1[3];
+            $.ajax({
+                url:"http://route.showapi.com/131-49",
+                data:{
+                    showapi_appid:"37573",
+                    showapi_sign:"1160ac6566e344b5af7ba114fd60b6f7",
+                    code:firstSort.groupId,
+                    day:"1"
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    firstSort.groupName=data.showapi_res_body.name;
+                    firstSort.timeData=data.showapi_res_body.dataList[0].minuteList;
+                }
+            });
+            firstSort.startTime=getChoiceDate($("#startDate").val());
+            firstSort.endTime=getChoiceDate($("#endDate").val());
+            $.ajax({
+                url:"http://localhost:3000/historyData?code=cn_"+firstSort.groupId+"&start="+firstSort.startTime+"&end="+firstSort.startTime,
+                data: {
+                    username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
+                    shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId
+                },
+                dataType:"json",
+                cache:"false",
+                type:"GET",
+                async: false,
+                success:function(data){
+                    firstSort.hisData=data.data[0].hq;
+                }
+            });
+        }
+    };
+}
+
+
