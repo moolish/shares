@@ -137,13 +137,17 @@ function dateChoice(){
     //     var html="<li>"+dateList.[0]+"月"+dateList[1]+"日</li>"
     // }
     // }
-
+    $(".hide-list").hover(function(){
+        $(".time-choice")
+    })
     $(".time-choice ul li").unbind("click").bind({
         "click":function(){
-           choiceDate=parseInt($(this).data("count"));
-           timingChart(sharesParm);
+            choiceDate=parseInt($(this).data("count"));
+            $(".time-choice ul li").removeClass("choice-checked");
+            $(this).addClass("choice-checked");
+            timingChart(sharesParm);
         }
-    })
+    });
 }
 /*分时数据
 
