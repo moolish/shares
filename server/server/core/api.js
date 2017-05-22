@@ -75,7 +75,7 @@ const register = function (req, res, next) {
 };
 
 const historyData = function (req, res, next) {
-    const { code, start, end } = req.query;
+    const { code, start, end, username, shareId } = req.query; // eg: code=cn_300228
     if (!code || !start || !end) {
         return res.json({
             code: 1,
@@ -84,9 +84,23 @@ const historyData = function (req, res, next) {
     }
     const options = {
         url: `${config.server.historyUrl}&code=${code}&start=${start}&end=${end}`,
-        enableCache: true,
+        enableCache: false,
     };
     request.get(options, (err, response, json) => {
+        // 更新数据库中 shareId
+        console.log(username);
+        if (username) {
+            models['User'].update({
+                shareId: `${shareId}-${code.split('_')[1] || code}`
+            }, {
+                where: { username: username }
+            }).then(user => {
+                console.log(username, '更新shareId');
+            }).catch(err => {
+                console.error(username,'更新查询记录失败', err);
+            });
+        }
+
         if (err) {
             return res.json({
                 code: 2,
