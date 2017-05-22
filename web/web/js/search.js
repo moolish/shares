@@ -9,35 +9,91 @@ var groupId="",//股票名
     choiceDate= 0,//分时日期
     historyParm="";//历史股票信息
     init();
-    function init(){
-        var qs = getQueryString();
-        var q1 = qs["searchId"];
-        groupId=q1;
-        getGroupId(groupId);//股票id获取
-        getAjaxSearch(groupList);//实时信息、分时
-        searchPage();//页内搜索
-        historyDate();//日历插件
+function init(){
+    var qs = getQueryString();
+    var q1 = qs["searchId"];
+    groupId=q1;
+    // getGroupId(groupId);//股票id获取
+    if (isLogin()) { // 判断用户是否登录
 
-        if (isLogin()) { // 判断用户是否登录
-            $('.logout').unbind("click").bind({
-                "click":function(){
-                    Cookies.remove('user');
-                    location.reload();
-                }
-            });
-        } else {
-            $(".loading").unbind("click").bind({
-                "click":function(){
-                    login();
-                }
-            });
-            $(".register").unbind("click").bind({
-                "click":function(){
-                    register();
-                }
-            });
-        }
+        // 登录成功，获取历史搜索记录
+        getHistoryGroupId();
+
+        showHistoryItems();
+
+        $('.logout').unbind("click").bind({
+            "click":function(){
+                Cookies.remove('user');
+                Cookies.remove('history');
+                isLogin();
+            }
+        });
     }
+    $(".loading").unbind("click").bind({
+        "click":function(){
+            login();
+        }
+    });
+    $(".register").unbind("click").bind({
+        "click":function(){
+            register();
+        }
+    });
+``
+    getAjaxSearch(groupList);//实时信息、分时
+    searchPage();//页内搜索
+    historyDate();//日历插件
+
+}
+
+/**
+ * [仅仅用于修改用户信息cookie的shareId信息]
+ * @param {[shareId]}
+ */
+var setUserCookieShareId = {
+    add: function(shareId) {
+        console.log(shareId);
+        var user = Cookies.getJSON('user');
+        // 判断shareId是字符串
+        if (typeof shareId === 'string' && shareId.length === 6) {
+            // 去重
+            var ids = (user.shareId && user.shareId.split('-')) || [];
+            ids = ids.filter((id, i) => {
+                console.log(id);
+                return id !== shareId && id;
+            })
+            ids.push(shareId);
+            user.shareId = ids.join('-');
+            console.log(user);
+            Cookies.set('user', user);
+        }
+    },
+    // 后期拓展
+    // delete: function(shareId){},
+    // clearAll: function(){},
+
+};
+var setUserHistory = {
+    add: function(shareInfo) {
+        shareInfo = Array.isArray(shareInfo) ? shareInfo[0]: shareInfo;
+        var history = Cookies.getJSON('history');
+        // 判断shareId是字符串
+        if (shareInfo) {
+            history.forEach((his, index) => {
+                if (his && his.shareId && his.shareId === shareInfo.shareId) {
+                    history.splice(index, 1);
+                }
+            });
+            history.unshift(shareInfo);
+            Cookies.set('history', history);
+        }
+    },
+    // 后期拓展
+    // delete: function(shareId){},
+    // clearAll: function(){},
+
+};
+
     /*
         获取股票ID
         上证600
@@ -56,6 +112,27 @@ function getGroupId(groupId){
 
     }
 }
+
+// 从cookie里获取历史搜索记录。登录状态才调用此函数
+function getHistoryGroupId() {
+    var shareId = Cookies.getJSON('user').shareId;
+    shareId.split('-').forEach(id => {
+        getGroupId(id); // set id in groupList
+    });
+}
+
+function showHistoryItems() {
+    // 显示历史搜索记录
+    var historyItems = '';
+    var his = Cookies.getJSON('history') || [];
+    his.forEach(item => {
+        if (item) {
+            historyItems += `<li>${item.shareId}, ${item.shareSecurity}, ${item.shareName}</li>`;
+        }
+    });
+    $('.js-history-items').html(historyItems);
+}
+
 function errorPop(){
 
 }
@@ -103,11 +180,12 @@ function getAjaxSearch(groupList){
         success:function(){
             var sharesCode=eval("hq_str_"+securities+groupId);
             $("#try").html(sharesCode);
+
             sharesList=sharesCode.split(",");
             sharesNew(sharesList);
             ajaxTiming(groupList);//分时数据获取
             timingList(sharesTiming);
-            groupList[groupList.length-1].push(sharesList[0]);
+            // groupList[groupList.length-1].push(sharesList[0]);
             $(".loading-cartoon").hide();
             $("body").removeClass("body-hidden")
             },
@@ -557,17 +635,27 @@ function getAjaxHisory(groupList){
     dateList=[$("#startDate").val(),$("#endDate").val()];
     var code=groupList[groupList.length-1][0];
 
+    if (Cookies.getJSON('user')) {
+        setUserCookieShareId.add(code);
+    }
+
     $.ajax({
         url:"http://localhost:3000/historyData?code=cn_"+code+"&start="+startDate+"&end="+endDate,
         data: {
             username: Cookies.getJSON('user') && Cookies.getJSON('user').username,
-            shareId: Cookies.getJSON('user') && Cookies.getJSON('user').shareId,
+            shareId:  Cookies.getJSON('user') && Cookies.getJSON('user').shareId,
         },
         dataType:"json",
         cache:"false",
         type:"GET",
         success:function(data){
-            historyParm=data.data[0].hq;
+            var user = Cookies.getJSON('user');
+            if (user) {
+                setUserHistory.add(data.shareInfo);
+                getHistoryGroupId();
+                showHistoryItems();
+            }
+            historyParm=(data.data[0] && data.data[0].hq) || [];
             historyChart(historyParm);
         }
     });
@@ -790,28 +878,29 @@ function historyChart(historyParam){
     });
 }
 
-function _changeURL(url, arg, arg_val) {
-    var pattern = arg + '=([^&]*)';
-    var replaceText = arg + '=' + arg_val;
-    if (url.match(pattern)) {
-       var tmp = '/(' + arg + '=)([^&]*)/gi';
-       tmp = url.replace(eval(tmp), replaceText);
-       return tmp;
-    } else {
-       if (url.match('[\?]')) {
-           return url + '&' + replaceText;
-       } else {
-           return url + '?' + replaceText;
-       }
-    }
-    return url + '\n' + arg + '\n' + arg_val;
-}
-
-function _getUrlParam(name){
-    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if (r!=null) return unescape(r[2]); return null;
-}
+// function _changeURL(url, arg, arg_val) {
+//     var pattern = arg + '=([^&]*)';
+//     var replaceText = arg + '=' + arg_val;
+//     if (url.match(pattern)) {
+//        var tmp = '/(' + arg + '=)([^&]*)/gi';
+//        tmp = url.replace(eval(tmp), replaceText);
+//        return tmp;
+//     } else {
+//        if (url.match('[\?]')) {
+//            return url + '&' + replaceText;
+//        } else {
+//            return url + '?' + replaceText;
+//        }
+//     }
+//     return url + '\n' + arg + '\n' + arg_val;
+// }
+//
+// function _getUrlParam(name){
+//     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+//     var r = window.location.search.substr(1).match(reg);
+//     if (r!=null) return unescape(r[2]); return null;
+// }
+//
 
 function isLogin() {
     // 判断是否登录
@@ -822,13 +911,17 @@ function isLogin() {
         $('.js-current-user').css('display', 'block');
         $('.js-current-username').html(user.username);
 
-        // 判断当前url的shareId是否与用户的shareId相等，不相等则刷新
-        if (_getUrlParam('shareId') !== user.shareId) {
-            // 刷新当前页面
-            location.search = _changeURL(location.search, 'shareId', user.shareId);
-        }
+        // // 判断当前url的shareId是否与用户的shareId相等，不相等则刷新
+        // if (_getUrlParam('searchId') !== user.shareId) {
+        //     // 刷新当前页面
+        //     location.search = _changeURL(location.search, 'searchId', user.shareId);
+        // }
         return true;
     }
+    // 未登录
+    $('.js-login-form').css('display', 'block');
+    $('.js-current-user').css('display', 'none');
+    // $('.js-current-username').html(user.username);
     return false;
 }
 
@@ -851,10 +944,18 @@ function login(){
             cache:"false",
             type:"POST",
             success:function(data){
+                console.log(data);
                 if (data.code === 0 && data.data) {
                     // 登录成功
+                    $(".loading-pop").hide();
                     Cookies.set('user', {shareId: data.data.shareId, username: data.data.username}, {expires: 30});
-                    location.reload();
+                    Cookies.set('history', data.data.historyShares || [], {expires: 30});
+                    // 修改groupList， 并且渲染搜索历史
+                    isLogin();
+                    // groupList.concat(data.data.historyShares || []);
+                    getHistoryGroupId();
+                    showHistoryItems();
+                    getAjaxSearch(groupList);
                 } else {
                    alert(data.msg);
                 }
@@ -890,8 +991,9 @@ function register(){
             success:function(data){
                 if (data.code === 0 && data.data) {
                      // 注册成功
-                     Cookies.set('user', {shareId: data.data.shareId, username: data.data.username}, {expires: 30});
-                     location.reload();
+                    $(".register-pop").hide();
+                    Cookies.set('user', {shareId: data.data.shareId, username: data.data.username}, {expires: 30});
+                    location.reload();
                 } else {
                     alert(data.msg);
                 }
