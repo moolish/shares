@@ -4,6 +4,30 @@ const BaseProxy = require('../proxy/base');
 const models = require('../models');
 const request = require('../helper/api');
 
+// 查询历史数据
+const _getHistoryShare = function(shareIds, cb) {
+    const options = {};
+    if (!shareIds) {
+        cb(null, []);
+    }
+    if (Array.isArray(shareIds)) {
+        // 是数组
+        options.where = {
+            shareId: { $in: shareIds}
+        };
+    } else {
+        options.where = {
+            shareId: shareIds
+        };
+    }
+    BaseProxy.get('Share', options, (err, shares) => {
+        if (err) {
+            console.error(err);
+        }
+        return cb(null, shares || []);
+    });
+};
+
 // 用户登录
 const login = function (req, res, next) {
     const { username, password } = req.body;
@@ -26,13 +50,16 @@ const login = function (req, res, next) {
                 msg: '密码错误',
             });
         }
-        return res.json({
-            code: 0,
-            msg: '登录成功',
-            data: {
-                username: user.username,
-                shareId: user.shareId
-            }
+        _getHistoryShare(user.shareId.split('-'), (err, shares) => {
+            return res.json({
+                code: 0,
+                msg: '登录成功',
+                data: {
+                    username: user.username,
+                    shareId: user.shareId,
+                    historyShares: shares
+                }
+            });
         });
     });
 };
@@ -91,27 +118,42 @@ const historyData = function (req, res, next) {
         console.log(username);
         if (username) {
             models['User'].update({
-                shareId: `${shareId}-${code.split('_')[1] || code}`
+                shareId: `${shareId ? shareId + '-' : ''}${code.split('_')[1] || code}`
             }, {
                 where: { username: username }
             }).then(user => {
                 console.log(username, '更新shareId');
+                return {
+                    code: 0,
+                    msg: 'ok',
+                    data: json,
+                };
             }).catch(err => {
                 console.error(username,'更新查询记录失败', err);
+                return {
+                    code: 2,
+                    msg: err.message,
+                    data: {},
+                };
+            }).then(json => {
+                _getHistoryShare(code.split('_')[1] || code, (err, share) => {
+                    json.shareInfo = share;
+                    return res.json(json);
+                });
             });
-        }
-
-        if (err) {
+        } else {
+            if (err) {
+                return res.json({
+                    code: 2,
+                    msg: err.message,
+                });
+            }
             return res.json({
-                code: 2,
-                msg: err.message,
+                code: 0,
+                msg: 'ok',
+                data: json,
             });
         }
-        return res.json({
-            code: 0,
-            msg: 'ok',
-            data: json,
-        });
     });
 
 };
