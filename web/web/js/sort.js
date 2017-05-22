@@ -1,27 +1,27 @@
 /**
  * Created by Administrator on 2017/5/22.
  */
-$(function(){
-    var array1=["冷冻食品","婴儿尿布","日常护理","路由器","手机","手机贴膜","米面杂粮","休闲食品","水果"];
-    var array2=["蜜饯干果","面膜","乳液面霜","饮品甜品","移动电源","洁面","沐浴","电水壶","食用油","禽肉蛋品","休闲零食","插座","电饭煲","蔬菜","手机保护套"];
-    var hasMove=false;
-    init(array1,array2);
+function sort() {
+    var array1 = ["冷冻食品", "婴儿尿布", "日常护理", "路由器", "手机", "手机贴膜", "米面杂粮", "休闲食品", "水果"];
+    var array2 = ["蜜饯干果", "面膜", "乳液面霜", "饮品甜品", "移动电源", "洁面", "沐浴", "电水壶", "食用油", "禽肉蛋品", "休闲零食", "插座", "电饭煲", "蔬菜", "手机保护套"];
+    var hasMove = false;
+    initPop(array1, array2);
     disLike(array1);
-    recommendmove(array1,array2)
-    choosemove(array1,array2,hasMove);
+    recommendmove(array1, array2)
+    choosemove(array1, array2, hasMove);
+}
 
-})
 // 创建
-function init(array1,array2){
+function initPop(array1,array2){
     var top,left;
     for(var i=0;i<array1.length;i++){
-        top=4.9+parseInt(i/4)*2;
+        top=parseInt(i/4)*2;
         left=0.85+i%4*4.3;
         $("<li class='chooseList"+i+"' style='position:absolute;z-index:0;top:"+top+"rem;left:"+left+"rem'>"+array1[i]+"</li>").appendTo('.choose ul');
-        $('.choose').css("height",top+"rem");
+        $('.choose').css("height",(top+3.9)+"rem");
     }
     for(var j=0;j<array2.length;j++){
-        top=1.85+parseInt(j/4)*2;
+        top=parseInt(j/4)*2;
         left=0.85+j%4*4.3;
         $("<li class='recommendList"+j+"' style='position:absolute;z-index:0;top:"+top+"rem;left:"+left+"rem'>"+array2[j]+"</li>").appendTo('.recommend ul');
         $('.recommend').css("height",top+2+"rem");
@@ -295,9 +295,9 @@ function choosemove(array1,array2,hasMove,event){
                 var cancelLi=$(this);
                 var lastmodelX=0.85;
                 var lastmodelY=1.85;
-                var modelY=4.9+parseInt(num/4)*2;
+                var modelY=3.9+parseInt(num/4)*2;
                 var modelX=0.85+num%4*4.3;
-                var top1N=4.9+parseInt((array1.length-1)/4)*2;
+                var top1N=3.9+parseInt((array1.length-1)/4)*2;
                 $(this).children().remove();
                 cancelLi.css({
                     "transform":"translate("+(-modelX+lastmodelX)+"rem,"+(lastmodelY+top1N+3.25+1.3-modelY)+"rem)",
@@ -314,7 +314,7 @@ function choosemove(array1,array2,hasMove,event){
 
                     if((i)%4==0){
                         $(".chooseList"+i).css({
-                            "top":""+(4.9+parseInt(i/4)*2-2)+"rem",
+                            "top":""+(parseInt(i/4)*2-2)+"rem",
                             "left":""+(0.85+i%4*4.3+12.9)+"rem",
                             "transition":"all 0.5s"
                         });
@@ -364,4 +364,9 @@ function choosemove(array1,array2,hasMove,event){
         }
     });
 }
+function timingChartP(){
+    for(var i=0;i<arr1.length;i++){
 
+    }
+
+}

@@ -216,7 +216,16 @@ function dateChoice(){
     // }
     // }
     $(".hide-list").hover(function(){
-        $(".time-choice")
+        $(".time-choice").css({
+            "width":"352px",
+            "transition":"0.3s"
+        })
+
+    },function(){
+        $(".time-choice").css({
+            "width":"142px",
+            "transition":"0.3s"
+        })
     })
     $(".time-choice ul li").unbind("click").bind({
         "click":function(){
@@ -279,11 +288,110 @@ function timingList(sharesTiming){
         timeshares=[];
         trendtag=[];
     var myDate=new Date();
-
+    $(".time-shareing-list").empty();
     myDate.getTime();
     if(sharesTiming.length==0){
         var html="";
 
+    }
+    else if(sharesTiming.length==1){
+        trendtag.push(["",""]);
+        timeshares.push(["1分钟前",sharesTiming[sharesTiming.length-2].nowPrice]);
+        var html="<li><span class='time-out'>"+timeshares[i][0]+"</span>"+
+        "<br>"+
+        "<span class='time-out-price "+trendtag[i][0]+"'>"+timeshares[i][1]+"<i class="+trendtag[i][1]+"></i></span></li>";
+        $(".time-shareing-list").append(html);
+    }
+    else if(sharesTiming.length<5&&sharesTiming.length>1){
+        if(sharesTiming[sharesTiming.length-2].nowPrice>sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+        else if(sharesTiming[sharesTiming.length-2].nowPrice<sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        trendtag.push(["",""]);
+        timeshares.push(["1分钟前",sharesTiming[sharesTiming.length-2].nowPrice]);
+        timeshares.push(["3分钟前",sharesTiming[sharesTiming.length-4].nowPrice]);
+        for(var i=0;i<2;i++){
+            var html="<li><span class='time-out'>"+timeshares[i][0]+"</span>"+
+                "<br>"+
+                "<span class='time-out-price "+trendtag[i][0]+"'>"+timeshares[i][1]+"<i class="+trendtag[i][1]+"></i></span></li>";
+            $(".time-shareing-list").append(html);
+        }
+
+    }
+    else if(sharesTiming.length<7&&sharesTiming.length>4){
+        if(sharesTiming[sharesTiming.length-2].nowPrice>sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+        else if(sharesTiming[sharesTiming.length-2].nowPrice<sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        if(sharesTiming[sharesTiming.length-4].nowPrice>sharesTiming[sharesTiming.length-6].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+        else if(sharesTiming[sharesTiming.length-4].nowPrice<sharesTiming[sharesTiming.length-6].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        trendtag.push(["",""]);
+        timeshares.push(["1分钟前",sharesTiming[sharesTiming.length-2].nowPrice]);
+        timeshares.push(["3分钟前",sharesTiming[sharesTiming.length-4].nowPrice]);
+        timeshares.push(["5分钟前",sharesTiming[sharesTiming.length-6].nowPrice]);
+        for(var i=0;i<3;i++){
+            var html="<li><span class='time-out'>"+timeshares[i][0]+"</span>"+
+                "<br>"+
+                "<span class='time-out-price "+trendtag[i][0]+"'>"+timeshares[i][1]+"<i class="+trendtag[i][1]+"></i></span></li>";
+            $(".time-shareing-list").append(html);
+        }
+    }
+    else if(sharesTiming.length<12&&sharesTiming.length>7){
+        if(sharesTiming[sharesTiming.length-2].nowPrice>sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+    else if(sharesTiming[sharesTiming.length-2].nowPrice<sharesTiming[sharesTiming.length-4].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        if(sharesTiming[sharesTiming.length-4].nowPrice>sharesTiming[sharesTiming.length-6].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+        else if(sharesTiming[sharesTiming.length-4].nowPrice<sharesTiming[sharesTiming.length-6].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        if(sharesTiming[sharesTiming.length-6].nowPrice>sharesTiming[sharesTiming.length-11].nowPrice){
+            trendtag.push(["font-up","arrow-up"]);
+        }
+        else if(sharesTiming[sharesTiming.length-6].nowPrice<sharesTiming[sharesTiming.length-11].nowPrice){
+            trendtag.push(["font-down","arrow-down"]);
+        }
+        else{
+            trendtag.push(["",""]);
+        }
+        trendtag.push(["",""]);
+        timeshares.push(["1分钟前",sharesTiming[sharesTiming.length-2].nowPrice]);
+        timeshares.push(["3分钟前",sharesTiming[sharesTiming.length-4].nowPrice]);
+        timeshares.push(["5分钟前",sharesTiming[sharesTiming.length-6].nowPrice]);
+        timeshares.push(["10分钟前",sharesTiming[sharesTiming.length-11].nowPrice]);
+        for(var i=0;i<4;i++){
+            var html="<li><span class='time-out'>"+timeshares[i][0]+"</span>"+
+                "<br>"+
+                "<span class='time-out-price "+trendtag[i][0]+"'>"+timeshares[i][1]+"<i class="+trendtag[i][1]+"></i></span></li>";
+            $(".time-shareing-list").append(html);
+        }
     }
     else{
         if(sharesTiming[sharesTiming.length-2].nowPrice>sharesTiming[sharesTiming.length-4].nowPrice){
@@ -846,6 +954,7 @@ function historyChart(historyParam){
                     }
                 }
             },
+
             {
                 name: groupName,
                 type: 'line',
