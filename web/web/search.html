@@ -82,13 +82,14 @@
     <div class="sort-enter">
         <a href="javascript:void(0)" class="sort-btn"></a>
     </div>
+    <a href="javascript:void(0)" class="sort-pop-btn">股票对比&nbsp;&nbsp;></a>
 </div>
 <div class="date-choice">
     <label>起始时间</label>
     <input type="text" id="startDate" class="date_picker">
     <label>结束时间</label>
     <input type="text" id="endDate" class="date_picker">
-    <a href="" class="start-history">搜索</a>
+    <a href="javascript:void(0)" class="start-history">搜索</a>
 </div>
 <div class="history-chart" id="historyChart">
 </div>
@@ -140,12 +141,20 @@
 </div>
 <div class="sort-pop">
     <div class="back"></div>
+
     <div class="sort">
+        <a href="javasript:void(0)" id="startSort">输出K线图</a>
+        <!--<a href="javascript:void(0)" id="addSort">新增股票</a>-->
+        <a href="javascript:void(0)" id="closePop"></a>
+        <div class="new-groupId">
+            <input type="text" class="new-test">
+            button
+        </div>
         <div class="sort-content">
             <div class="choose">
                 <div class="edit">
                     <button type="button" value="edit">编辑</button>
-                    <button type="button"></button>
+
                 </div>
                 <p>股票筛选</p>
                 <ul>
@@ -161,6 +170,14 @@
             <div id="sortChart"></div>
         </div>
     </div>
+    <div class="sort-chart">
+        <div class="sortChart"></div>
+    </div>
+
+    <div class="add-groupid">
+
+    </div>
+
 </div>
 <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="js/echarts.min.js"></script>

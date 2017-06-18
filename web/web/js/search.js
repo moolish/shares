@@ -39,7 +39,17 @@ function init(){
             register();
         }
     });
-``
+    $(".start-history").unbind("click").bind({
+        "click":function(){
+            getAjaxHisory()
+        }
+    });
+    $(".sort-pop-btn").unbind("click").bind({
+        "click":function(){
+            sort();
+        }
+    })
+
     getAjaxSearch(groupList);//实时信息、分时
     searchPage();//页内搜索
     historyDate();//日历插件
@@ -127,7 +137,7 @@ function showHistoryItems() {
     var his = Cookies.getJSON('history') || [];
     his.forEach(item => {
         if (item) {
-            historyItems += `<li>${item.shareId}, ${item.shareSecurity}, ${item.shareName}</li>`;
+            historyItems += `<li>${item.shareName}</li>`;
         }
     });
     $('.js-history-items').html(historyItems);
@@ -449,6 +459,7 @@ function splitData(rawData) {
     var values = new Array();
     var volumns = [];
     var newPrice=[];
+    var avgPrice=[]
     for (var i = 0; i < rawData.length; i++) {
         var chartTime=rawData[i].time;
         var chartTime1=chartTime.slice(0,2)+":"+chartTime.slice(2,4);
@@ -460,12 +471,14 @@ function splitData(rawData) {
         values[i][3]=rawData[i].volume;
         volumns.push(rawData[i].volume);
         newPrice.push(rawData[i].nowPrice);
+        avgPrice.push(rawData[i].avgPrice);
     }
     return {
         categoryData: categoryData,
         values: values,
         volumns: volumns,
-        newPrice:newPrice
+        newPrice:newPrice,
+        avgPrice:avgPrice
     };
 }
 
@@ -630,30 +643,30 @@ function timingChart(sharesParm){
             }
         ],
         series: [
-            // {
-            //     name: groupName,
-            //     type: 'candlestick',
-            //     data: data.newPrice,
-            //     itemStyle: {
-            //         normal: {
-            //             borderColor: null,
-            //             borderColor0: null
-            //         }
-            //     },
-            //     tooltip: {
-            //         formatter: function (param) {
-            //             // param = param[0];
-            //             console.log(param);
-            //             return [
-            //                 'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">'+
-            //                 '均价: ' + param.data[0] + '<br/>'+
-            //                 '当前时间价格:' + param.data[2] + '<br/>'+
-            //                 '交易量: ' + param.data[3] + '<br/>'
-            //                 // 'Highest: ' + param.data[3] + '<br/>'
-            //             ].join('');
-            //         }
-            //     }
-            // },
+             //{
+             //    name: groupName,
+             //    type: 'candlestick',
+             //    data: data.newPrice,
+             //    itemStyle: {
+             //        normal: {
+             //            borderColor: null,
+             //            borderColor0: null
+             //        }
+             //    },
+             //    tooltip: {
+             //        formatter: function (param) {
+             //            // param = param[0];
+             //            console.log(param);
+             //            return [
+             //                'Date: ' + param.name + '<hr size=1 style="margin: 3px 0">'+
+             //                '均价: ' + param.data[0] + '<br/>'+
+             //                '当前时间价格:' + param.data[2] + '<br/>'+
+             //                '交易量: ' + param.data[3] + '<br/>'
+             //                // 'Highest: ' + param.data[3] + '<br/>'
+             //            ].join('');
+             //        }
+             //    }
+             //},
             {
                 name: groupName,
                 type: 'line',
@@ -662,14 +675,17 @@ function timingChart(sharesParm){
                 lineStyle: {
                     normal: {opacity: 0.5}
                 },
-                markLine: {
-                data: [
-                    {
-                        yAxis: 100,
-                        name: '昨日收盘价'
-                    }
-                ]
-            }
+
+
+            },
+            {
+                name: groupName,
+                type: 'line',
+                data: data.avgPrice,
+                smooth: true,
+                lineStyle: {
+                    normal: {opacity: 0.5}
+                }
 
             },
             // {
@@ -724,20 +740,28 @@ function historyDate(){
     $("#startDate").date_input();
     $("#endDate").date_input();
 }
-function getAjaxHisory(groupList){
-    var startDate=$("#startDate").val();
-    var endDate=$("#endDate").val();
+
+function getAjaxHisory(){
+    var startDate="";
+    var endDate="";
     var thisDate=new Date();
-    var thisDay=dateZero(thisDate.getDate());
-    var thisMonth=dateZero(thisDate.getMonth()+1);
+    var thisDay=thisDate.getDate();
+    var thisMonth=thisDate.getMonth()+1;
     var thisYear=thisDate.getFullYear();
 
     if(startDate==""){
-        $("#startDate").val(getDateBefore(70));
+        $("#startDate").val(getDateBefore(100));
         startDate=getChoiceDate($("#startDate").val());
     }
+    else{
+        startDate=getChoiceDate($("#startDate").val());
+    }
+
     if(endDate==""){
         $("#endDate").val(thisYear+"-"+thisMonth+"-"+thisDay);
+        endDate=getChoiceDate($("#endDate").val());
+    }
+    else{
         endDate=getChoiceDate($("#endDate").val());
     }
     dateList=[$("#startDate").val(),$("#endDate").val()];
@@ -789,8 +813,9 @@ function hisSplitData(rawData) {
     };
 }
 function historyChart(historyParam){
-    var groupName=groupList[groupList.length-1][3];
+    //var groupName=groupList[groupList.length-1][3];
     var data = hisSplitData(historyParam);
+    var groupName=historyParam
     var myChart = echarts.init(document.getElementById('historyChart'));
     myChart.setOption(option = {
         backgroundColor: '#eee',
@@ -956,7 +981,7 @@ function historyChart(historyParam){
             },
 
             {
-                name: groupName,
+                name: "MA5",
                 type: 'line',
                 data: calculateMA(5, data),
                 smooth: true,
@@ -964,6 +989,33 @@ function historyChart(historyParam){
                     normal: {opacity: 0.5}
                 }
             },
+             {
+                 name: 'MA10',
+                 type: 'line',
+                 data: calculateMA(10, data),
+                 smooth: true,
+                 lineStyle: {
+                     normal: {opacity: 0.5}
+                 }
+             },
+             {
+                 name: 'MA20',
+                 type: 'line',
+                 data: calculateMA(20, data),
+                 smooth: true,
+                 lineStyle: {
+                     normal: {opacity: 0.5}
+                 }
+             },
+            // {
+            //     name: 'MA30',
+            //     type: 'line',
+            //     data: calculateMA(30, data),
+            //     smooth: true,
+            //     lineStyle: {
+            //         normal: {opacity: 0.5}
+            //     }
+            // },
 
             {
                 name: "交易量",
@@ -1075,7 +1127,7 @@ function login(){
             }
         });
     });
-    $("register-link").click(function(){
+    $(".register-link").click(function(){
         register();
     })
 
