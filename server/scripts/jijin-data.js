@@ -1,4 +1,6 @@
 const request = require('request');
+const csv = require('csv');
+const fs = require('fs');
 const models = require('../server/models');
 
 const jijinData = [];
@@ -26,17 +28,35 @@ function callback(error, response, body) {
                     date: dateString,
                 });
             });
-            Promise.all(jijinData.map(data => {
-                models['Fund'].create(data);
-            })).then(data => {
-                console.log('Funds数据新增成功');
-                return ;
-            }).catch(err => {
-                console.error('Funds数据新增失败', err);
-                return ;
+            csv.stringify(jijinData, { header: true, }, function (err, data) {
+                if (err) {
+                    console.error(`生成csv文件失败！${err}`);
+                } else {
+                    try {
+                        const now = new Date();
+                        const yearmonthday = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+                        // fs.writeFileSync(`${__dirname}/../data/jijin-data_${yearmonthday}.csv`, data);
+                        const outputFile = fs.createWriteStream(`${__dirname}/../data/jijin-data_${yearmonthday}.csv`);
+
+                        outputFile.write(data, 'UTF-8');
+
+                        outputFile.on("open", function(fd) {
+                            console.log("开始写入文件. . . \n");
+                        });
+                        outputFile.end("the end", function() {
+                            console.log("文件写入完毕! \n");
+                            process.exit(0);
+                        });
+
+                    } catch (error) {
+                        console.error(`文件写入失败${error}`);
+                        process.exit(1);
+                    }
+                }
             });
         } else {
             console.log(error);
+            process.exit(1);
         }
     }
 }
